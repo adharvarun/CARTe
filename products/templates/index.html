@@ -23,6 +23,11 @@
         text-align: center;
     }
 
+    .product-card:hover {
+        transform: scale(1.05);
+        transition: transform 0.3s ease-in-out;
+    }
+
     .product-card img {
         max-width: 100%;
         height: 200px;
@@ -56,7 +61,6 @@
         background: #0056b3;
     }
 </style>
-
 <h1>Products</h1>
 <div class="product-grid">
     {% for product in products %}
@@ -64,8 +68,46 @@
         <img src="{{ product.image_url }}" alt="{{ product.name }}">
         <h5>{{ product.name }}</h5>
         <p>${{ product.price }}</p>
-        <a href="#" class="add-to-cart">Add to Cart</a>
+        <form method="POST" action="{% url 'add_to_cart' %}">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ product.id }}">
+            <button type="submit" class="add-to-cart">Add to Cart</button>
+        </form>
     </div>
     {% endfor %}
 </div>
+
+<script>
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.dataset.id;
+
+            fetch('/add-to-cart/', { 
+                method: 'POST', 
+                headers: { 
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': getCSRFToken()
+                },
+                body: `id=${productId}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                updateCartCount();  // Update the cart count after adding
+            })
+            .catch(error => console.error("Error adding to cart:", error));
+        });
+    });
+
+    function getCSRFToken() {
+        return document.querySelector('[name=csrfmiddlewaretoken]').value;
+    }
+
+    function updateCartCount() {
+        fetch("{% url 'get_cart_count' %}")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('cart-count').textContent = data.cart_count;
+            });
+    }
+</script>
 {% endblock %}

@@ -5,7 +5,7 @@
 
 * 0.1.0
     * Work in Progress
-    * Cart and Search Required to be added
+    * Search & Login to be added
 
 ## Meta
 
