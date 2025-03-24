@@ -9,7 +9,7 @@
 
 ## Meta
 
-Your Name – [@adharvarun](https://github.com/adharvarun) – adharvarun.10@gmail.com
+Adharv Arun – [@adharvarun](https://github.com/adharvarun) – adharvarun.10@gmail.com
 
 Unlicensed Product
 
